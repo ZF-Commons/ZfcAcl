@@ -4,7 +4,6 @@ namespace ZfcUserAcl\Model;
 
 interface Role
 {
-
     /**
      * getRoleId 
      * 
