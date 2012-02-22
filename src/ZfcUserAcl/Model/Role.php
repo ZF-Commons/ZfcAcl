@@ -2,7 +2,9 @@
 
 namespace ZfcUserAcl\Model;
 
-interface Role
+use Zend\Acl\Role as AclRole;
+
+interface Role extends AclRole
 {
     /**
      * getRoleId 

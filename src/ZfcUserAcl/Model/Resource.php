@@ -2,7 +2,9 @@
 
 namespace ZfcUserAcl\Model;
 
-interface Resource
+use Zend\Acl\Resource as AclResource;
+
+interface Resource extends AclResource
 {
     /**
      * getResourceId 
