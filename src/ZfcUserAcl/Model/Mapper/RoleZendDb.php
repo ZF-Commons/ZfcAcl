@@ -6,7 +6,7 @@ use ZfcUserAcl\Module as ZfcUserAcl,
     ZfcUserAcl\Model\Role as RoleModel,
     ZfcBase\Mapper\DbMapperAbstract;
 
-class RoleZendDb extends DbMapperAbstract implements UserRole
+class RoleZendDb extends DbMapperAbstract implements Role
 {
     protected $tableName = 'role';
 
