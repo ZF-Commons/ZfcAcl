@@ -35,4 +35,12 @@ interface Resource extends AclResource
      * @return Resource
      */
     public function setName($name);
+
+    /**
+     * fromArray 
+     * 
+     * @param array $resource 
+     * @return Resource
+     */
+    public static function fromArray(array $resource);
 }

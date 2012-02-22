@@ -56,4 +56,13 @@ class ResourceBase implements Resource
         $this->name = $name;
         return $this;
     }
+
+    public static function fromArray(array $resource)
+    {
+        $model = new Resource();
+        $model->setResourceId($resource['resource_id'])
+            ->setName($resource['name']);
+
+        return $model;
+    }
 }
