@@ -48,4 +48,12 @@ interface Role
      * @return Role
      */
     public function setPriority($priority);
+
+    /**
+     * fromArray
+     * 
+     * @param array $role 
+     * @return Role
+     */
+    public static function fromArray(array $role);
 }

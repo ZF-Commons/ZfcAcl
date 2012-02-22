@@ -2,7 +2,8 @@
 
 namespace ZfcUserAcl\Model\Mapper;
 
-use ZfcUserAcl\Model\Role as RoleModel,
+use ZfcUserAcl\Module as ZfcUserAcl,
+    ZfcUserAcl\Model\Role as RoleModel,
     ZfcBase\Mapper\DbMapperAbstract;
 
 class RoleZendDb extends DbMapperAbstract implements UserRole
@@ -28,6 +29,14 @@ class RoleZendDb extends DbMapperAbstract implements UserRole
             ->from($this->getTableName());
 
         $rows = $db->fetchAll($sql);
-        return $rows;
+
+        $modelClass = ZfcUserAcl::getOption('role_model_class');
+        $models = array();
+
+        foreach ($rows as $row) {
+            $models[] = $modelClass::fromArray($row);
+        }
+
+        return $models;
     }
 }

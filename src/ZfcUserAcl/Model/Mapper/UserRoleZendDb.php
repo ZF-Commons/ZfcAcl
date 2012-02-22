@@ -28,6 +28,14 @@ class UserRoleZendDb extends DbMapperAbstract implements UserRole
             ->join('role', 'user_role.role_id = role.role_id');
 
         $rows = $db->fetchAll($sql);
-        return $rows;
+
+        $modelClass = ZfcUserAcl::getOption('role_model_class');
+        $models = array();
+
+        foreach ($rows as $row) {
+            $models[] = $modelClass::fromArray($row);
+        }
+
+        return $models;
     }
 }

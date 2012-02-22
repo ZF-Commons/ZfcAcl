@@ -6,6 +6,8 @@ use Zend\Module\Consumer\AutoloaderProvider;
 
 class Module implements AutoloaderProvider
 {
+    protected static $options;
+
     public function getAutoloaderConfig()
     {
         return array(
@@ -23,5 +25,19 @@ class Module implements AutoloaderProvider
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+
+    public function modulesLoaded($e)
+    {
+        $config = $e->getConfigListener()->getMergedConfig();
+        static::$options = $config['zfcuseracl'];
+    }
+
+    public static function getOption($option)
+    {
+        if (!isset(static::$options[$option])) {
+            return null;
+        }
+        return static::$options[$option];
     }
 }

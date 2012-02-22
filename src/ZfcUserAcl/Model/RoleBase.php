@@ -85,4 +85,14 @@ class RoleBase implements Role
         $this->priority = $priority;
         return $this;
     }
+
+    public static function fromArray(array $role)
+    {
+        $model = new Role();
+        $model->setRoleId($role['role_id'])
+            ->setName($role['name'])
+            ->setPriority($role['priority']);
+
+        return $model;
+    }
 }
