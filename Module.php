@@ -1,43 +1,38 @@
 <?php
 
-namespace ZfcUserAcl;
+namespace ZfcAcl;
 
-use Zend\Module\Consumer\AutoloaderProvider;
+use Zend\Module\Manager,
+    Zend\Mvc\AppContext as Application,
+    Zend\EventManager\StaticEventManager,
+    Zend\EventManager\EventDescription as Event,
+    Zend\Mvc\MvcEvent as MvcEvent,
+    ZfcBase\Module\ModuleAbstract;
 
-class Module implements AutoloaderProvider
-{
-    protected static $options;
-
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
-    }
-
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
-
-    public function modulesLoaded($e)
-    {
-        $config = $e->getConfigListener()->getMergedConfig();
-        static::$options = $config['zfcuseracl'];
-    }
-
-    public static function getOption($option)
-    {
-        if (!isset(static::$options[$option])) {
-            return null;
+class Module extends ModuleAbstract {
+    
+    public function bootstrap(Manager $moduleManager, Application $app) {
+        $locator      = $app->getLocator();
+        
+        $events = StaticEventManager::getInstance();
+        
+        if($this->getOption('enable_guards.route', true)) {
+            $routeProtector = $locator->get('ZfcAcl\Guard\Route');
+            $app->events()->attach('dispatch', array($routeProtector, 'dispatch'), 1000);
         }
-        return static::$options[$option];
+        
+        if($this->getOption('enable_guards.event', true)) {
+            $guard = $locator->get('ZfcAcl\Guard\Event');
+            $guard->bootstrap();
+        }
     }
+    
+    public function getDir() {
+        return __DIR__;
+    }
+    
+    public function getNamespace() {
+        return __NAMESPACE__;
+    }
+    
 }
