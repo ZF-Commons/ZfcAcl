@@ -3,7 +3,7 @@ Zend Framework 2 - ZF-Commons ACL module
 Version: 0.1  
 Author:  [Matus Zeman (matuszemi)](https://github.com/matuszemi)
 
-Based on [ZfcAcl](https://github.com/ZF-Commons/ZfcAcl), part of Zf-Commons since 22/03/2012.
+Based on [KapitchiAcl](https://github.com/kapitchi/KapitchiAcl), part of Zf-Commons since 22/03/2012.
 
 Skype: matuszemi  
 Email: matus.zeman@gmail.com  
