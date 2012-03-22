@@ -2,7 +2,9 @@
 
 namespace ZfcUserAcl\Model;
 
-interface Role
+use Zend\Acl\Role as AclRole;
+
+interface Role extends AclRole
 {
     /**
      * getRoleId 
@@ -48,4 +50,12 @@ interface Role
      * @return Role
      */
     public function setPriority($priority);
+
+    /**
+     * fromArray
+     * 
+     * @param array $role 
+     * @return Role
+     */
+    public static function fromArray(array $role);
 }
