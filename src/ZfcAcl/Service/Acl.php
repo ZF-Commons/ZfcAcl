@@ -82,34 +82,7 @@ class Acl extends ServiceAbstract {
         }
     }
     
-    public function invalidateCache() {
-        $this->triggerEvent('invalidateCache', array(
-            'roleId' => $this->getRoleId(),
-        ));
-        
-        $this->acl = null;
-    }
-    
-    /**
-     * @return Zend\Acl\Role
-     */
-    public function getRole() {
-        $result = $this->events()->trigger('getRole', $this, array(), function($ret) {
-            return $ret instanceof Role;
-        });
-        $role = $result->last();
-        if(!$role instanceof Role) {
-            $role = new GenericRole('guest');
-        }
-        
-        return $role;
-    }
-    
-    protected function getRoleId() {
-        return $this->getRole()->getRoleId();
-    }
-    
-    protected function getAcl() {
+    public function getAcl() {
         if($this->acl === null) {
             $roleId = $this->getRoleId();
             $result = $this->events()->trigger('getAcl', $this, array(
@@ -138,6 +111,33 @@ class Acl extends ServiceAbstract {
         }
         
         return $this->acl;
+    }
+    
+    public function invalidateCache() {
+        $this->triggerEvent('invalidateCache', array(
+            'roleId' => $this->getRoleId(),
+        ));
+        
+        $this->acl = null;
+    }
+    
+    /**
+     * @return Zend\Acl\Role
+     */
+    public function getRole() {
+        $result = $this->events()->trigger('getRole', $this, array(), function($ret) {
+            return $ret instanceof Role;
+        });
+        $role = $result->last();
+        if(!$role instanceof Role) {
+            $role = new GenericRole('guest');
+        }
+        
+        return $role;
+    }
+    
+    protected function getRoleId() {
+        return $this->getRole()->getRoleId();
     }
     
     //event listeners

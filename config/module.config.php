@@ -25,8 +25,7 @@ return array(
                         'roles' => array(
                             'guest' => null,
                             'auth' => null,
-                            'user' => 'auth',
-                            'admin' => 'auth',
+                            'user' => null,
                         ),
                         'rules' => array(
                             'allow' => array(

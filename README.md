@@ -64,17 +64,15 @@ This is only one service delivered by this module with three public methods:
 
 Roles, resources and rules
 --------------------------
-ACL module introduces following common roles below. There are no specific permissions set for them as it should be responsibility of your modules to do so.
+ACL module introduces following common roles below. There are no specific permissions/hierarchy set for them as it should be responsibility of your application/modules to do so.
 
 * guest - anonymous/non authenticated user 
 * auth - authenticated user but with no local user reference 
-* user (parent: auth) - authenticated user with local user reference 
-* admin (parent: auth) - can be used to define admininistrator user permissions
+* user - authenticated user with local user reference 
 
 The idea behind _auth_ role is that some applications might not need to manage users locally (so there is no local user reference/id known) but they still want users to be authenticated to unlock few parts of the application.
 This can be used to render few extra "social" blocks on you site while you're authenticated using Facebook Connect. In this case you might want to consider creating new role auth/facebook and set Facebook related permissions to this role.
-_user_ and _admin_ roles are considered as having local user reference managed by your user/authentication module.
-They have got _auth_ parent role so generally speaking whatever _auth_ user can do _user_ and _admin_ users are allowed to do also.
+_user_ role is considered as having local user reference managed by your user/authentication module.
 
 
 ### Acl configuration
@@ -88,6 +86,7 @@ File: MyModule/config/module.config.php
 
 $aclConfig = array(
     'roles' => array(
+        'admin' => null,
         'role1' => null,
         'role2_with_one_parent' => 'user',
         'role3_with_multiple_parents' => array('guest', 'auth'),
