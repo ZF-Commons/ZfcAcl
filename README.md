@@ -298,7 +298,10 @@ return array(
 
 Dynamic ACL
 ------------------------
-TBD
+
+TODO
+
+Example of dynamic ACL can be find in [ZfcAcl plugin for KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/ResourceLoader.php)
 
 
 Events
