@@ -16,6 +16,11 @@ return array(
                     'aclLoader' => 'ZfcAcl\Model\Mapper\AclLoaderConfig',
                 ),
             ),
+            'ZfcAcl\Service\Context' => array(
+                'parameters' => array(
+                    'aclService' => 'ZfcAcl\Service\Acl',
+                ),
+            ),
             'ZfcAcl\Model\Mapper\AclLoaderConfig' => array(
                 'parameters' => array(
                     'config' => array(
