@@ -25,6 +25,11 @@ class Module extends ModuleAbstract {
             $guard = $locator->get('ZfcAcl\Guard\Event');
             $guard->bootstrap();
         }
+        
+        if($this->getOption('enable_loaders.resource', true)) {
+            $loader = $locator->get('ZfcAcl\Loader\Resource');
+            $events->attach('ZfcAcl\Service\Acl', 'loadResource', array($loader, 'onLoadResource'));
+        }
     }
     
     public function getDir() {

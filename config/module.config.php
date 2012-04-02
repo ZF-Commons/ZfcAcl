@@ -6,6 +6,9 @@ return array(
             'enable_guards' => array(
                 'route' => false,//enable route guard
                 'event' => false,//enable event guard
+            ),
+            'enable_loaders' => array(
+                'resource' => false,//enable resource loader
             )
         ),
     ),
@@ -62,6 +65,18 @@ return array(
                 'parameters' => array(
                     'aclService' => 'ZfcAcl\Service\Acl',
                     'eventGuardDefMapper' => 'ZfcAcl\Model\Mapper\EventGuardDefMapConfig',
+                )
+            ),
+            'ZfcAcl\Loader\Resource' => array(
+                'parameters' => array(
+                    'resourceLoaderDefMapper' => 'ZfcAcl\Model\Mapper\ResourceLoaderDefConfig',
+                )
+            ),
+            'ZfcAcl\Model\Mapper\ResourceLoaderDefConfig' => array(
+                'parameters' => array(
+                    'config' => array(
+                        //settings
+                    )
                 )
             ),
         ),
