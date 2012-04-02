@@ -5,11 +5,12 @@ namespace ZfcAcl\Model;
 use Zend\EventManager\Event,
     ZfcBase\Model\ModelAbstract;
 
-class EventGuardDefStatic extends ModelAbstract implements EventGuardDef {
+abstract class EventGuardDefTriggeredEventAware extends ModelAbstract implements EventGuardDef {
     protected $eventId;
     protected $event;
     protected $resource;
     protected $privilege;
+    protected $triggeredEvent;
     protected $options;
     
     public function getEventId() {
@@ -43,7 +44,7 @@ class EventGuardDefStatic extends ModelAbstract implements EventGuardDef {
     public function setPrivilege($privilege) {
         $this->privilege = $privilege;
     }
-    
+
     public function getOptions() {
         return $this->options;
     }
@@ -51,5 +52,15 @@ class EventGuardDefStatic extends ModelAbstract implements EventGuardDef {
     public function setOptions($options) {
         $this->options = $options;
     }
+    
+    public function getTriggeredEvent() {
+        return $this->triggeredEvent;
+    }
+
+    public function setTriggeredEvent(Event $triggeredEvent) {
+        $this->triggeredEvent = $triggeredEvent;
+    }
+
+
 
 }

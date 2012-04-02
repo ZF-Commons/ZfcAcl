@@ -6,4 +6,5 @@ interface EventGuardDef {
     public function getEvent();
     public function getResource();
     public function getPrivilege();
+    public function setOptions($options);
 }

@@ -3,6 +3,8 @@
 namespace ZfcAcl\Guard;
 
 use Zend\EventManager\StaticEventManager,
+    Zend\Acl\Resource,
+    ZfcAcl\Model\EventGuardDefTriggeredEventAware,
     ZfcAcl\Exception\UnauthorizedException;
 
 class Event implements Guard {
@@ -17,12 +19,18 @@ class Event implements Guard {
         $defs = $defMapper->findByRoleId($acl->getRole()->getRoleId());
         
         foreach($defs as $def) {
-            
             $events->attach($def->getEventId(), $def->getEvent(), function($e) use ($acl, $def) {
+                if($def instanceof EventGuardDefTriggeredEventAware) {
+                    $def->setTriggeredEvent($e);
+                }
+                
                 $resource = $def->getResource();
                 $privilege = $def->getPrivilege();
                 if(!$acl->isAllowed($resource, $privilege)) {
                     $roleId = $acl->getRole()->getRoleId();
+                    if($resource instanceof Resource) {
+                        $resource = $resource->getResourceId();
+                    }
                     throw new UnauthorizedException("You ($roleId) are not allowed to perform '$privilege' on '$resource'");
                 }
             }, 1000);

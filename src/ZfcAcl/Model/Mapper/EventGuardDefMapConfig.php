@@ -34,12 +34,23 @@ class EventGuardDefMapConfig implements EventGuardDefMap {
             }
         }
         
-        $def = new EventGuardDefStatic();
+        $class = 'ZfcAcl\Model\EventGuardDefStatic';
+        if($data['class']) {
+            $class = $data['class'];
+        }
+        
+        $def = new $class();
         $def->setEventId($data['eventId']);
         $def->setEvent($data['event']);
         $def->setResource($data['resource']);
         if(isset($data['privilege'])) {
             $def->setPrivilege($data['privilege']);
+        }
+        if(isset($data['options'])) {
+            if(!is_array($data['options'])) {
+                throw new InvalidArgumentException("Options needs to be an array");
+            }
+            $def->setOptions($data['options']);
         }
         
         return $def;
