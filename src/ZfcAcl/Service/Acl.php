@@ -59,7 +59,7 @@ class Acl extends ServiceAbstract {
                 'acl' => $acl,
                 'roleId' => $roleId,
                 'resource' => $resource,
-                'privilage' => $privilege
+                'privilege' => $privilege
             ));
             
             //mz: we don't want to cache dynamic resources - this should be removed?
@@ -68,7 +68,7 @@ class Acl extends ServiceAbstract {
 //                'acl' => $acl,
 //                'roleId' => $roleId,
 //                'resource' => $resource,
-//                'privilage' => $privilege
+//                'privilege' => $privilege
 //            ));
         }
         
