@@ -63,6 +63,7 @@ This module does not manage user roles as it has been discussed above. Other mod
 RoleProvider implements one method getCurrentRole() which should return Zend\Acl\Role instance of currently logged in user.
 
 See an implementation of such provider in [KapitchiIdentity module - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/RoleProvider.php).
+
 ```
 File: MyModule/config/module.config.php
 
