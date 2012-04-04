@@ -14,12 +14,14 @@ use     Zend\EventManager\EventCollection,
         ZfcBase\Service\ServiceAbstract,
         ZfcAcl\Module,
         ZfcAcl\Model\Mapper\AclLoader,
+        ZfcAcl\Service\Acl\RoleProvider,
         InvalidArgumentException as NoStringResourceException;
 
 class Acl extends ServiceAbstract {
     protected $module;
     protected $acl;
     protected $aclLoader;
+    protected $roleProvider;
     
     /**
      * TODO XXX there is a bug in DI while injecting a module works with constructor only!
@@ -125,10 +127,12 @@ class Acl extends ServiceAbstract {
      * @return Zend\Acl\Role
      */
     public function getRole() {
-        $result = $this->events()->trigger('getRole', $this, array(), function($ret) {
-            return $ret instanceof Role;
-        });
-        $role = $result->last();
+        $roleProvider = $this->getRoleProvider();
+        if(!$roleProvider instanceof RoleProvider) {
+            throw new \RuntimeException("No role provider available");
+        }
+        
+        $role = $roleProvider->getCurrentRole();
         if(!$role instanceof Role) {
             $role = new GenericRole('guest');
         }
@@ -192,6 +196,14 @@ class Acl extends ServiceAbstract {
 
     public function setAclLoader(AclLoader $aclLoader) {
         $this->aclLoader = $aclLoader;
+    }
+    
+    public function getRoleProvider() {
+        return $this->roleProvider;
+    }
+
+    public function setRoleProvider($roleProvider) {
+        $this->roleProvider = $roleProvider;
     }
 
 }

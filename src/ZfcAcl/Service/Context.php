@@ -23,14 +23,21 @@ class Context extends ServiceAbstract {
             $role = new \Zend\Acl\Role\GenericRole($role);
         }
         
-        //do main stuff
-        $listener = $this->getAclService()->events()->attach('getRole', function($e) use($role) {
-            return $role;
-        }, 1000);
+        $aclService = $this->getAclService();
         
+        //creates temp role provider returning role provided in method call
+        $tmpRoleProvider = new Acl\GenericRoleProvider();
+        $tmpRoleProvider->setCurrentRole($role);
+        
+        //swap role providers
+        $origRoleProvider = $aclService->getRoleProvider();
+        $aclService->setRoleProvider($tmpRoleProvider);
+        
+        //execute
         $ret = $callback->call($args);
         
-        $this->getAclService()->events()->detach($listener);
+        //swap it back
+        $aclService->setRoleProvider($origRoleProvider);
         
         return $ret;
     }
