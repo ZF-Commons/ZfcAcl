@@ -21,6 +21,16 @@ return array(
                     'aclService' => 'ZfcAcl\Service\Acl',
                 ),
             ),
+            'ZfcAcl\Controller\Plugin\ZfcAcl' => array(
+                'parameters' => array(
+                    'zfcAcl' => 'ZfcAcl\Service\Acl',
+                ),
+            ),
+            'ZfcAcl\View\Helper\ZfcAcl' => array(
+                'parameters' => array(
+                    'zfcAcl' => 'ZfcAcl\Service\Acl',
+                ),
+            ),
             'ZfcAcl\Model\Mapper\AclLoaderConfig' => array(
                 'parameters' => array(
                     'config' => array(
