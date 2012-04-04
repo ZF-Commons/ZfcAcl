@@ -38,12 +38,17 @@ Requirements
 * [Zend Framework 2](https://github.com/zendframework/zf2) (latest master)
 * [ZfcBase](https://github.com/ZF-Commons/ZfcBase) (latest master)
 
+Installation
+============
+
+1. Put module into /vendor folder
+2. Implement own
+
 Usage
 =====
 You can manage roles, resources and what rules is loaded into ACL using module.config.php file (DI configuration) from your module.
 The module comes with few pre-defined roles/resources/rules (see [module config](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/module.config.php)).
-ACL module depends on other modules in order to provide role of currently logged in user otherwise it defaults to _guest_ role (see "ZfcAcl\Service\Acl.getRole" event description below).
-See an example in [KapitchiIdentity module - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl.php).
+[ACL service](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Service/Acl.php) depends on other modules in order to provide role of currently logged in user otherwise it defaults to _guest_ role (see below "Setting up RoleProvider").
 
 ZfcUser integration [TBD]
 
@@ -51,16 +56,29 @@ Options
 -------
 See [module config](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/module.config.php#L4) for all options available.
 
-Application services
---------------------
 
-### ZfcAcl\Service\Acl
+Setting up RoleProvider
+-----------------------
+This module does not manage user roles as it has been discussed above. Other modules are responsible for setting [RoleProvider instance](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Service/Acl/RoleProvider.php) for Acl service (using DI configuration).
+RoleProvider implements one method getCurrentRole() which should return Zend\Acl\Role instance of currently logged in user.
 
-This is only one service delivered by this module with three public methods:
+See an implementation of such provider in [KapitchiIdentity module - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/RoleProvider.php).
+```
+File: MyModule/config/module.config.php
 
-* isAllowed(resource, privilege) - check if current user is allowed to resource/privilege
-* getRole() - returns current role of the user
-* invalidateCache() - TBD invalidates ACL cache (if enabled in options) - should be called when ACL for the user might change e.g. they login, logout, ...
+return array(
+    'di' => array(
+        'instance' => array(
+            'ZfcAcl\Service\Acl' => array(
+                'parameters' => array(
+                    'roleProvider' => 'MyModule\Plugin\ZfcAcl\RoleProvider'
+                ),
+            ),
+        ),
+    ),
+);
+            
+```
 
 Roles, resources and rules
 --------------------------
@@ -304,17 +322,31 @@ TODO
 Example of dynamic ACL can be find in [ZfcAcl plugin for KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/ResourceLoader.php)
 
 
+Application services
+--------------------
+
+### ZfcAcl\Service\Acl
+
+Public methods:
+
+* isAllowed(resource, privilege) - check if current user is allowed to resource/privilege
+* getRole() - returns current role of the user
+* invalidateCache() - TBD invalidates ACL cache (if enabled in options) - should be called when ACL for the user might change e.g. they login, logout, ...
+
+
+### ZfcAcl\Service\Context
+
+This services meant to be used when it is needed to overwrite current role context to run some operation.
+
+Usage example [KapitchiIdentity\Service\Registration::register()](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Service/Registration.php).
+
+Public methods:
+
+* runAs($role, $callable) - runs "callable" under role provide
+d
+
 Events
 ------
-
-### ZfcAcl\Service\Acl.getRole
-
-This event is used to retrieve role of currently logged in user. It expects listener to return Zend\Acl\Role instance; if none current role defaults to _guest_.
-
-Triggers until: Zend\Acl\Role
-
-Parameters: none
-
 
 ### ZfcAcl\Service\Acl.getAcl
 
