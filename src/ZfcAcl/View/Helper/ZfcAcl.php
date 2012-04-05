@@ -7,21 +7,21 @@ use Zend\View\Helper\AbstractHelper,
 
 class ZfcAcl extends AbstractHelper
 {
-    protected $zfcAcl;
+    protected $aclService;
 
-    public function isAllowed($resource, $privilege)
+    public function isAllowed($resource, $privilege = null)
     {
-        return $this->getZfcAcl()->isAllowed($resource, $privilege);
+        return $this->getAclService()->isAllowed($resource, $privilege);
     }
     
-    public function getZfcAcl ()
+    public function getAclService ()
     {
-        return $this->ZfcAcl;
+        return $this->aclService;
     }
     
-    public function setZfcAcl ($ZfcAcl)
+    public function setAclService ($aclService)
     {
-        $this->ZfcAcl = $ZfcAcl;
-        return $this->ZfcAcl;
+        $this->aclService = $aclService;
+        return $this->aclService;
     }
 }
