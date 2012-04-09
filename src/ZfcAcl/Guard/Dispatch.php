@@ -18,6 +18,14 @@ class Dispatch implements Guard
     protected $dispatchableResourceMapper;
 
     /**
+     * @param DispatchableResourceMapperInterface $dispatchableResourceMapper
+     */
+    public function __construct(DispatchableResourceMapperInterface $dispatchableResourceMapper)
+    {
+        $this->setDispatchableResourceMapper($dispatchableResourceMapper);
+    }
+
+    /**
      * @var AclService
      */
     protected $aclService;
@@ -51,7 +59,7 @@ class Dispatch implements Guard
     /**
      * @param DispatchableResourceMapperInterface $dispatchableResourceMapper
      */
-    public function setDispatchableResourceMap(DispatchableResourceMapperInterface $dispatchableResourceMapper)
+    public function setDispatchableResourceMapper(DispatchableResourceMapperInterface $dispatchableResourceMapper)
     {
         $this->dispatchableResourceMapper = $dispatchableResourceMapper;
     }
