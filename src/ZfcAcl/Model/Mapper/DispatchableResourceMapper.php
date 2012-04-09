@@ -4,7 +4,12 @@ namespace ZfcAcl\Model\Mapper;
 
 use ZfcBase\Model\ModelAbstract;
 
-class DispatchableResourceMap extends ModelAbstract
+/**
+ * Simply maps provided dispatchable names to resource names. In this case by simply adding some prefix.
+ *
+ * @todo add method to reverse mappings?
+ */
+class DispatchableResourceMapper extends ModelAbstract implements DispatchableResourceMapperInterface
 {
     const DEFAULT_RESOURCE_PREFIX = 'dispatchable/';
 
@@ -14,14 +19,11 @@ class DispatchableResourceMap extends ModelAbstract
     protected $resourcePrefix = self::DEFAULT_RESOURCE_PREFIX;
 
     /**
-     * Retrieves the resource id associated with the given controller name
-     *
-     * @param string $controllerName
-     * @return string
+     * {@inheritDoc}
      */
-    public function getControllerResource($controllerName)
+    public function getDispatchableResource($dispatchableName)
     {
-        return $this->resourcePrefix . $controllerName;
+        return $this->resourcePrefix . $dispatchableName;
     }
 
     /**

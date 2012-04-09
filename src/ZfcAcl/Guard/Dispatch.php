@@ -4,7 +4,7 @@ namespace ZfcAcl\Guard;
 
 use Zend\Mvc\MvcEvent,
     ZfcAcl\Exception\UnauthorizedException,
-    ZfcAcl\Model\Mapper\DispatchableResourceMap,
+    ZfcAcl\Model\Mapper\DispatchableResourceMapperInterface,
     ZfcAcl\Service\Acl as AclService;
 
 /**
@@ -13,9 +13,9 @@ use Zend\Mvc\MvcEvent,
 class Dispatch implements Guard
 {
     /**
-     * @var DispatchableResourceMap
+     * @var DispatchableResourceMapperInterface
      */
-    protected $dispatchableResourceMap;
+    protected $dispatchableResourceMapper;
 
     /**
      * @var AclService
@@ -30,7 +30,7 @@ class Dispatch implements Guard
             // Can't check against null
             return;
         }
-        $controllerResource = $this->dispatchableResourceMap->getControllerResource($controller);
+        $controllerResource = $this->dispatchableResourceMapper->getDispatchableResource($controller);
 
         if (!$this->aclService->isAllowed($controllerResource)) {
             throw new UnauthorizedException(
@@ -40,14 +40,20 @@ class Dispatch implements Guard
         }
     }
 
-    public function getDispatchableResourceMap()
+    /**
+     * @return DispatchableResourceMapperInterface
+     */
+    public function getDispatchableResourceMapper()
     {
-        return $this->dispatchableResourceMap;
+        return $this->dispatchableResourceMapper;
     }
 
-    public function setDispatchableResourceMap(DispatchableResourceMap $dispatchableResourceMap)
+    /**
+     * @param DispatchableResourceMapperInterface $dispatchableResourceMapper
+     */
+    public function setDispatchableResourceMap(DispatchableResourceMapperInterface $dispatchableResourceMapper)
     {
-        $this->dispatchableResourceMap = $dispatchableResourceMap;
+        $this->dispatchableResourceMapper = $dispatchableResourceMapper;
     }
 
     public function getAclService()

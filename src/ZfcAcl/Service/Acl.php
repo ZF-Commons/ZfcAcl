@@ -202,7 +202,7 @@ class Acl extends ServiceAbstract {
         return $this->roleProvider;
     }
 
-    public function setRoleProvider($roleProvider) {
+    public function setRoleProvider(RoleProvider $roleProvider) {
         $this->roleProvider = $roleProvider;
     }
 

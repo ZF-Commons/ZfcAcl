@@ -3,15 +3,14 @@
 namespace ZfcAcl;
 
 use Zend\Module\Manager,
-Zend\Mvc\AppContext as Application,
-Zend\EventManager\StaticEventManager,
-Zend\EventManager\EventDescription as Event,
-Zend\Mvc\MvcEvent as MvcEvent,
-ZfcBase\Module\ModuleAbstract;
+    Zend\Mvc\AppContext as Application,
+    Zend\EventManager\StaticEventManager,
+    Zend\EventManager\EventDescription as Event,
+    Zend\Mvc\MvcEvent as MvcEvent,
+    ZfcBase\Module\ModuleAbstract;
 
 class Module extends ModuleAbstract
 {
-
     public function bootstrap(Manager $moduleManager, Application $app)
     {
         $locator = $app->getLocator();

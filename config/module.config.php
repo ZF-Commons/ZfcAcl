@@ -5,9 +5,9 @@ return array(
             // enable static acl session cache
             'enable_cache' => false,
             'enable_guards' => array(
-                'route' => false,
-                'event' => false,
-                'dispatch' => true,
+                'route'     => false,
+                'event'     => false,
+                'dispatch'  => false,
             ),
         ),
     ),
@@ -18,6 +18,7 @@ return array(
             'ZfcAcl\Service\Acl' => array(
                 'parameters' => array(
                     'aclLoader' => 'ZfcAcl\Model\Mapper\AclLoaderConfig',
+                    'roleProvider' => 'ZfcAcl\Service\Acl\GenericRoleProvider',
                 ),
             ),
 
@@ -34,17 +35,21 @@ return array(
                     'config' => array(
                         'resources' => array(
                             //'Route/Default' => null,//used by ZfcAcl\Guard\Route
+                            // 'resource-id-1' => array('parent-resource-id-1', 'parent-resource-id-2'),
+                            // 'resource-id-2' => null,
                         ),
                         'roles' => array(
-                            'guest' => null,
-                            'auth' => null,
-                            'user' => null,
+                            // 'role-id-1' => array('parent-role-id-1', 'parent-role-id-2'),
+                            // 'role-id-2' => null
                         ),
                         'rules' => array(
                             'allow' => array(
-                                //'allow/default_route' => array(array('auth', 'guest'), 'Route/Default'),
-                            )
-                        )
+                                // Keys in these array are just for allowing overrides, the syntax is:
+                                // 'somekey' => array( array('role1', 'role2', 'role3'),'resource-id')
+                            ),
+                            'deny' => array(
+                            ),
+                        ),
                     ),
                 ),
             ),
@@ -54,21 +59,21 @@ return array(
                 'parameters' => array(
                     'aclService' => 'ZfcAcl\Service\Acl',
                     'routeResourceMapMapper' => 'ZfcAcl\Model\Mapper\RouteResourceMapConfig',
-                )
+                ),
             ),
 
             // Maps routes to resources
             'ZfcAcl\Model\Mapper\RouteResourceMapConfig' => array(
                 'parameters' => array(
                     'config' => array(
-                        //'default' => 'Route/Default',
-                        'child_map' => array(
-                            'default' => array(
-                                //'default' => 'Route/Default',
-                            )
-                        )
-                    )
-                )
+                        // 'route-1' => 'resource-id-for-route-1'
+                        // 'child_map' => array(
+                        //     'route-1' => array(
+                        //         'child-route-1' => 'resource-id-for-child-route-1',
+                        //     ),
+                        // ),
+                    ),
+                ),
             ),
 
             // Event guard
@@ -76,15 +81,15 @@ return array(
                 'parameters' => array(
                     'aclService' => 'ZfcAcl\Service\Acl',
                     'eventGuardDefMapper' => 'ZfcAcl\Model\Mapper\EventGuardDefMapConfig',
-                )
+                ),
             ),
 
             // Dispatch guard
             'ZfcAcl\Guard\Dispatch' => array(
                 'parameters' => array(
                     'aclService' => 'ZfcAcl\Service\Acl',
-                    'dispatchableResourceMap' => 'ZfcAcl\Model\Mapper\DispatchableResourceMap',
-                )
+                    'dispatchableResourceMapper' => 'ZfcAcl\Model\Mapper\DispatchableResourceMapper',
+                ),
             ),
         ),
     ),
