@@ -41,7 +41,7 @@ Requirements
 Installation
 ============
 
-1. Put the module into /vendor folder and activate in application.config.php.
+1. Put the module into /vendor folder and activate it in application.config.php.
 2. Implement own RoleProvider (or use existing modules which does it already e.g. [KapitchiIdentity - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity) or [ZfcUser - ???](https://github.com/ZF-Commons/ZfcUser)).
 3. Set up static ACL with your own roles, resources, rules as you need (see "Roles, resources and rules" below).
 4. (Optionally) Set up route/event guards (see "Guards" below) which do provide implicit protection to your application.
