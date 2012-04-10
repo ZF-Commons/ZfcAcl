@@ -21,6 +21,5 @@ class ZfcAcl extends AbstractPlugin
     public function setAclService ($aclService)
     {
         $this->aclService = $aclService;
-        return $this->aclService;
     }
 }
