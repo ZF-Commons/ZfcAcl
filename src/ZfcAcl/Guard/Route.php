@@ -10,7 +10,7 @@ class Route implements Guard {
     protected $routeResourceMapMapper;
     protected $aclService;
     
-    public function dispatch(MvcEvent $e) {
+    public function onRoute(MvcEvent $e) {
         $routeMatch = $e->getRouteMatch();
         $routeName = $routeMatch->getMatchedRouteName();
         

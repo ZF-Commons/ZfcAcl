@@ -19,7 +19,7 @@ class Module extends ModuleAbstract
 
         if ($this->getOption('enable_guards.route', true)) {
             $routeProtector = $locator->get('ZfcAcl\Guard\Route');
-            $app->events()->attach('dispatch', array($routeProtector, 'dispatch'), 1000);
+            $app->events()->attach('route', array($routeProtector, 'onRoute'), -1000);
         }
 
         if ($this->getOption('enable_guards.event', true)) {
