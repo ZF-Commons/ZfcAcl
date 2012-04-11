@@ -18,7 +18,7 @@ return array(
             'ZfcAcl\Service\Acl' => array(
                 'parameters' => array(
                     'aclLoader' => 'ZfcAcl\Model\Mapper\AclLoaderConfig',
-                    'roleProvider' => 'ZfcAcl\Service\Acl\GenericRoleProvider',
+                    //'roleProvider' => 'ZfcAcl\Service\Acl\GenericRoleProvider',//this should be set by role management modules
                 ),
             ),
 
