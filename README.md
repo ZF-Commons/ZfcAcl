@@ -65,7 +65,7 @@ Setting up RoleProvider
 This module does not manage user roles as it has been discussed above. Other modules are responsible for setting [RoleProvider instance](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Service/Acl/RoleProvider.php) for Acl service (using DI configuration).
 RoleProvider implements one method getCurrentRole() which should return Zend\Acl\Role instance of currently logged in user.
 
-See an implementation of such provider in [KapitchiIdentity module - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/RoleProvider.php).
+See an implementation of such provider in [KapitchiIdentity module - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentityAcl/Service/RoleProvider.php).
 
 ```
 File: MyModule/config/module.config.php
