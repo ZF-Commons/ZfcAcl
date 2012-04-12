@@ -1,75 +1,69 @@
-Zend Framework 2 - ZF-Commons ACL module
-=================================================
-Version: 0.1  
-Author:  [Matus Zeman (matuszemi)](https://github.com/matuszemi)
+# ZfcAcl - Acl module for Zend Framework 2 applications
 
-Based on [KapitchiAcl](https://github.com/kapitchi/KapitchiAcl), part of Zf-Commons since 22/03/2012.
-
-Skype: matuszemi  
-Email: matus.zeman@gmail.com  
-IRC: matuszemi @ FreeNode / #zftalk.2  
-
-
-Introduction
-============
 Provides ACL and different types of "guards" for your application.
 
+Version: 0.1
+Based on [KapitchiAcl](https://github.com/kapitchi/KapitchiAcl)
 
-Features
-========
+Author:  [Matus Zeman (matuszemi)](https://github.com/matuszemi)
+Skype: matuszemi
+Email: matus.zeman@gmail.com
+IRC: matuszemi @ irc://irc.freenode.net#zftalk.2
 
-* Acl management (Config adapter - using module.config.php)
-  * Roles (including hierarchies) [COMPLETE]
-  * Resources (including hierarchies) [COMPLETE]
-  * Allow/deny rules [COMPLETE]
-* Application services
-  * Acl [COMPLETE]
-* Guards
-  * Route - protects Mvc routes [COMPLETE]
-  * Event - protects events [COMPLETE]     
-* Dynamic ACL [TBD]
-* ACL cache mechanism [TBD]
-* Db adapters (Zend\Db) for all above [NOT STARTED]
-* Config -> Db sync [NOT STARTED]
+## Features
 
-Requirements
-============
+ * Acl management (Config adapter - using module.config.php)
+    * Roles (including hierarchies) [COMPLETE]
+    * Resources (including hierarchies) [COMPLETE]
+    * Allow/deny rules [COMPLETE]
+ * Application services
+    * Acl [COMPLETE]
+ * Guards
+    * Route - protects Mvc routes [COMPLETE]
+    * Event - protects events [COMPLETE]
+    * Dispatch - protects controllers/dispatchables [COMPLETE]
+ * Dynamic ACL [TBD]
+ * ACL cache mechanism [TBD]
+ * Db adapters (Zend\Db) for all above [NOT STARTED]
+ * Config -> Db sync [NOT STARTED]
 
-* [Zend Framework 2](https://github.com/zendframework/zf2) (latest master)
-* [ZfcBase](https://github.com/ZF-Commons/ZfcBase) (latest master)
+## Requirements
 
-Installation
-============
+ * [Zend Framework 2](https://github.com/zendframework/zf2) (latest master)
+ * [ZendSkeletonApplication](https://github.com/zendframework/ZendSkeletonApplication) (latest master)
+ * [ZfcBase](https://github.com/ZF-Commons/ZfcBase) (latest master)
 
-1. Put the module into /vendor folder and activate it in application.config.php.
-2. Implement own RoleProvider (or use existing modules which does it already e.g. [KapitchiIdentity - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity) or [ZfcUser - ???](https://github.com/ZF-Commons/ZfcUser)).
-3. Set up static ACL with your own roles, resources, rules as you need (see "Roles, resources and rules" below).
-4. (Optionally) Set up route/event guards (see "Guards" below) which do provide implicit protection to your application.
-5. Your are good to go now - just ask the Acl service - $aclService->isAllowed('ZfcAcl', 'use')?
+## Installation
 
-Usage
-=====
-You can manage roles, resources and what rules is loaded into ACL using module.config.php file (DI configuration) from your module.
-The module comes with few pre-defined roles/resources/rules (see [module config](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/module.config.php)).
-[ACL service](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Service/Acl.php) depends on other modules in order to provide role of currently logged in user otherwise it defaults to _guest_ role (see below "Setting up RoleProvider").
+ 1. Put the module into `/vendor` folder and activate in your `config/application.config.php`.
+ 2. Implement your own `ZfcAcl\Service\Acl\RoleProvider` (The default one is `ZfcAcl\Service\Acl\GenericRoleProvider`, you can replace it in configuration with your own implementation or reuse [KapitchiIdentity](https://github.com/kapitchi/KapitchiIdentity)'s plugin or [ZfcUser](https://github.com/ZF-Commons/ZfcUser)).
+ 3. Set up static ACL with your own roles, resources, rules as you need (see "Roles, resources and rules" below).
+ 4. (Optionally) Set up route/event/dispatch guards (see "Guards" below) which do provide implicit protection to your application.
+ 5. Use the ACL service like `$aclService->isAllowed('ZfcAcl', 'use')`
 
-ZfcUser integration [TBD]
+## Usage
 
-Options
--------
-See [module config](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/module.config.php#L4) for all options available.
+You can manage roles, resources and what rules is loaded into ACL using the `module.config.php` file (`Zend\Di` configuration) from your module or `config/autoload`.
 
+The module is shipped with the `config/ZfcAcl.global.config.php.dist` file, which you can rename to `ZfcAcl.global.config.php` and put in your `config/autoload` directory.
+This configuration provides a few pre-defined roles/resources/rules that allow quick start when working with the standard ZendSkeletonApplication.
 
-Setting up RoleProvider
------------------------
-This module does not manage user roles as it has been discussed above. Other modules are responsible for setting [RoleProvider instance](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Service/Acl/RoleProvider.php) for Acl service (using DI configuration).
-RoleProvider implements one method getCurrentRole() which should return Zend\Acl\Role instance of currently logged in user.
+## Options
 
-See an implementation of such provider in [KapitchiIdentity module - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/RoleProvider.php).
+See [`config/module.config.php`](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/module.config.php#L4) for all available options.
 
-```
-File: MyModule/config/module.config.php
+## RoleProvider
 
+The `RoleProvider` is responsible for getting the currently active `Zend\Acl\Role` in your application.
+This module does not manage user roles, it just provides `ZfcAcl\Service\Acl\Role\GenericRoleProvider`as a dummy role provider.
+Other modules are responsible for assigning a `ZfcAcl\Service\Acl\RoleProvider` in your acl service.
+You can either do so through `Zend\Di` config (example below) or by interacting with the service itself.
+
+As an example, see an implementation of such provider in [KapitchiIdentity module - ZfcAcl plugin](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/RoleProvider.php).
+
+```php
+<?php
+// File: MyModule/config/module.config.php
 return array(
     'di' => array(
         'instance' => array(
@@ -81,187 +75,78 @@ return array(
         ),
     ),
 );
-            
 ```
 
-Roles, resources and rules
---------------------------
-ACL module introduces following common roles below. There are no specific permissions/hierarchy set for them as it should be responsibility of your application/modules to do so.
+## Roles, resources and rules
 
-* guest - anonymous/non authenticated user 
-* auth - authenticated user but with no local user reference 
-* user - authenticated user with local user reference 
+If you copied your `config/ZfcAcl.global.config.php.dist` to `config/autoload/ZfcAcl.global.config.php`, following roles are introduced.
+It is  up to you to define hierarchies or more complex ACL rules.
 
-The idea behind _auth_ role is that some applications might not need to manage users locally (so there is no local user reference/id known) but they still want users to be authenticated to unlock few parts of the application.
-This can be used to render few extra "social" blocks on you site while you're authenticated using Facebook Connect. In this case you might want to consider creating new role auth/facebook and set Facebook related permissions to this role.
-_user_ role is considered as having local user reference managed by your user/authentication module.
+ * `guest` - anonymous/non authenticated user 
+ * `auth` - authenticated user but with no local user reference 
+ * `user` - authenticated user with local user reference 
+
+The idea behind `auth` role is that some applications might not need to manage users locally (so there is no local user reference/id known) but they still want users to be authenticated to unlock few parts of the application.
+This can be used to render few extra "social" blocks on you site while you're authenticated using Facebook Connect.
+In this case you might want to consider creating new role auth/facebook and set Facebook related permissions to this role.
+`user` role is considered as having local user reference managed by your user/authentication module.
 
 
 ### Acl configuration
+
 ACL can be fully configured from module config using DI settings of [AclLoaderConfig mapper](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Model/Mapper/AclLoaderConfig.php).
-Nice example can be found in [KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/config/module.config.php) - search for "ZfcAcl\Model\Mapper\AclLoaderConfig".
+An example can be found in [KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/config/module.config.php) (search for `ZfcAcl\Model\Mapper\AclLoaderConfig`).
 The mapper reads config array defining roles/resources/rules in the structure below.
 
 #### Config example
-```
-File: MyModule/config/module.config.php
 
-$aclConfig = array(
-    'roles' => array(
-        'admin' => null,
-        'role1' => null,
-        'role2_with_one_parent' => 'user',
-        'role3_with_multiple_parents' => array('guest', 'auth'),
-    )
-    'resources' => array(
-        'parent' => array(
-            'child1' => null,
-            'child2_with_more_children' => array(
-                'grandchild1' => null,
-                'grandchild2' => null,
-            ),
-        ),
-    ),
-    'rules' => array(
-        'allow' => array(
-            //grand admin all privileges on any resource
-            'allow_rule_unique_identifier' => array('admin', null),
-            //grand user all privileges on child1 resource
-            'allow_rule_unique_identifier2' => array('user', 'child1'),
-            //grand user persist privilege to both grandchild1 and grandchild2 resources
-            'allow_rule_unique_identifier3' => array('user', array('grandchild1', 'grandchild2'), 'persist'),
-            //grand role1 remove and create privileges on parent resource 
-            'allow_rule_unique_identifier4' => array('role1', 'parent', array('remove', 'create')),
-        ),
-        'deny' => array(
-            //same format as for allow rules
-        ),
-    ),
-)
+Refer to [`config/ZfcAcl.global.config.php.dist`](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/ZfcAcl.global.config.php.dist) for a configuration example.
 
-return array(
-    'di' => array(
-        'instance' => array(
-            'ZfcAcl\Model\Mapper\AclLoaderConfig' => array(
-                'parameters' => array(
-                    'config' => $aclConfig
-                 )
-            )
-        )
-    )
-);   
-```
+## Guards
 
-
-Guards
-------
-Guards "protect" different aspects of the application from being accessible by unauthorized users.
-If unauthorized user tries to access e.g. route they are not permitted to [Unauthorized exception](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Exception/UnauthorizedException.php) is thrown.  
-They have been two guards implemented so far: Route and Event guards.
-
-TBD: Should we return HttpResponse instead of throwing Unauthorized exception?
+Guards "protect" different aspects of the application from being accessible by unauthorized roles.
+If unauthorized roles try to access/trigger a route/controller/event they are not permitted to, a `ZfcAcl\Exception\UnauthorizedException` is thrown.
 
 ### Route guard
-[Route guard](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Guard/Route.php) is used to protect MVC routes. The guard configuration maps route into ACL route resource. Route resource ACL can be then configured as any other resource permissions.
 
-The guard is attached to Zend\Mvc\Application.dispatch event at priority 1000.
+`ZfcAcl\Guard\Route` is used to protect MVC routes. The guard configuration maps route names to their ACL resource ids.
+These resources can then be used in `ZfcAcl\Service\Acl`.
+
+The guard is attached to `Zend\Mvc\Application.dispatch` event at priority of 1000.
 
 #### Config example
 
-Zend\Mvc\Router\RouteStack route configuration:
+Refer to [`config/ZfcAcl.global.config.php.dist`](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/ZfcAcl.global.config.php.dist) for a configuration example.
 
-* MyModule
-    * ChildRoute1
-    * ChildRoute2
-        * GrandChildRoute1
-        * GrandChildRoute2   
+### Dispatch guard
 
-See [ZF2 MVC Routing manual](http://packages.zendframework.com/docs/latest/manual/en/zend.mvc.routing.html) for more details or [KapitchiIdentity module example](https://github.com/kapitchi/KapitchiIdentity/blob/master/config/module.config.php).
+`ZfcAcl\Guard\Dispatch` is used to protect MVC dispatchables (controllers).
+The guard uses a mapper to get the resource ids for the requested controllers.
+The default mapper simply converts `$controllerName` to `"controller/$controllerName"`.
+These ACL resource ids must be defined in your ACL first.
 
+The guard is attached to `Zend\Mvc\Application.dispatch` event at priority of 1000.
 
-```
-File: MyModule/config/module.config.php
+#### Config example
 
-
-$routeResourceMapConfig = array(
-    'default' => 'Route' //sets default route resource - any unresolved routes defaults to 'Route' resource
-    'child_map' => array(
-        'MyModule' => array(
-            //sets 'MyModule/Route' resource being default resource for all child routes under MyModule route
-            'default' => 'MyModule/Route',
-            'child_map' => array(
-                //sets 'MyModule/Route/ChildRoute1' resource for 'ChildRoute1' route
-                'ChildRoute1' => 'MyModule/Route/ChildRoute1',
-                'ChildRoute2' => array(
-                    'default' => 'MyModule/Route/ChildRoute2'
-                    'child_map' => array(
-                        'GrandChildRoute1' => 'MyModule/Route/ChildRoute2/GrandChild1',
-                        'GrandChildRoute2' => 'MyModule/Route/ChildRoute2/GrandChild2',
-                     )
-                 )
-             )
-        )
-    )
-);
-
-$aclConfig = array(
-    'resources' => array(
-        'Route' => array(
-            'MyModule/Route' => array(
-                'MyModule/Route/ChildRoute1' => null,
-                'MyModule/Route/ChildRoute2' => array(
-                    'MyModule/Route/ChildRoute2/GrandChild1' => null,
-                    'MyModule/Route/ChildRoute2/GrandChild2' => null,
-                ),
-            ),
-        )
-    ),
-    'rules' => array(
-        'allow' => array(
-            //grand admin access permission to all pages/routes
-            'allow/default_route' => array('admin', 'Route'),
-            //grand user access permission to all pages under MyModule routes
-            'MyModule/allow/route2' => array('user', 'MyModule/Route'),
-         ),
-        'deny' => array(
-            //restrict user to access all pages under MyModule/Route/ChildRoute1 and MyModule/Route/ChildRoute2/GrandChild1 routes
-            'MyModule/deny/restrict_user' => array('user', array('MyModule/Route/ChildRoute1', 'MyModule/Route/ChildRoute2/GrandChild1')),
-         ),
-    ),
-);
-
-return array(
-    'di' => array(
-        'instance' => array(
-            'ZfcAcl\Model\Mapper\AclLoaderConfig' => array(
-                'parameters' => array(
-                    'config' => $aclConfig
-                 )
-            ),
-            'ZfcAcl\Model\Mapper\RouteResourceMapConfig' => array(
-                'parameters' => array(
-                    'config' => $routeResourceMapConfig
-                 )
-            )
-        )
-    )
-);   
-
-```                                                  
+Refer to [`config/ZfcAcl.global.config.php.dist`](https://github.com/ZF-Commons/ZfcAcl/blob/master/config/ZfcAcl.global.config.php.dist) for a configuration example.
 
 ### Event guard
 
-[Event guard](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Guard/Event.php) protects (at priority 1000) all events specified in the configuration. Similar to Route guard, Event guard maps event identifier (object which triggers the event - a target) and event name to a resource and privilege optionally.
+`ZfcAcl\Guard\Event` listens through the `StaticEventManager` (with priority 1000) to all events specified in its configuration.
+Similar to the Route guard, Event guard maps event identifier (event target) and event name to a resource and privilege optionally.
 Resource role permissions can be then adjusted as needed in ACL configuration.
 
 Example of common usage can be an authorizing certain roles to perform application service operations.
-E.g. you can specify that only _admin_ role can _persist_ _MyModule\Model\Album_ model. The condition obviously is to trigger an event before insert/update operation from a service method.
 
-The guard is attached to all events specified in the configuration at priority 1000. We use StaticEventManager to attach listeners to events.
+E.g. you can specify that only `admin` role can `persist` `MyModule\Model\Album` model.
+The condition obviously is to trigger an event before insert/update operation from a service method.
 
-```
-File: MyModule/config/module.config.php
+Here is an example of how events would be mapped:
 
+```php
+<?php
+// File: MyModule/config/module.config.php
 
 $eventGuardDefMapConfig = array(
     'MyModule/Model/Album.get' => array(
@@ -313,98 +198,21 @@ return array(
             )
         )
     )
-);   
-
-
+);
 ```
 
-Dynamic ACL
-------------------------
+## Dynamic ACL
 
-TODO
+Example of dynamic ACL can be found in the [ZfcAcl plugin for KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/ResourceLoader.php).
 
-Example of dynamic ACL can be find in [ZfcAcl plugin for KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/ResourceLoader.php)
+## Application services
 
+ * `ZfcAcl\Service\Acl` - provides simple interaction with a wrapped `Zend\Acl\Acl` instance.
+ * `ZfcAcl\Service\Context` - allows interaction with `ZfcAcl\Service\Acl` with a custom role.
 
-Application services
---------------------
+## Events
 
-### ZfcAcl\Service\Acl
-
-Public methods:
-
-* isAllowed(resource, privilege) - check if current user is allowed to resource/privilege
-* getRole() - returns current role of the user
-* invalidateCache() - TBD invalidates ACL cache (if enabled in options) - should be called when ACL for the user might change e.g. they login, logout, ...
-
-
-### ZfcAcl\Service\Context
-
-This services meant to be used when it is needed to overwrite current role context to run some operation.
-
-Usage example [KapitchiIdentity\Service\Registration::register()](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Service/Registration.php).
-
-Public methods:
-
-* runAs($role, $callable) - runs "callable" under role provide
-d
-
-Events
-------
-
-### ZfcAcl\Service\Acl.getAcl
-
-Used to retrieve Zend\Acl\Acl instance from e.g. caching mechanism. Acl returned is considered being fully loaded with roles, resources, rules.
-If none is returned Zend\Acl\Acl instance is created and ZfcAcl\Service\Acl.loadStaticAcl and ZfcAcl\Service\Acl.staticAclLoaded events are triggered.
-
-Triggers until: Zend\Acl\Acl
-
-Parameters:
-
-* roleId - roleId of the user e.g. guest, user...
-
-### ZfcAcl\Service\Acl.staticAclLoaded
-
-This event is trigger once ACL has been loaded. Can be used e.g. by caching mechanism to store ACL into session.
-
-Parameters:
-
-* acl - Zend\Acl\Acl object
-* roleId - roleId of the user e.g. guest, user...
-
-
-### ZfcAcl\Service\Acl.invalidateCache
-
-Triggered when ZfcAcl\Service\Acl::invalidateCache() is called manually.
-
-TBD: do we need auto invalidation of cached ACL? E.g. every 5 mins?
-
-Parameters:
-
-* roleId - roleId of the user e.g. guest, user...
-
-
-### TBD
-
-ZfcAcl\Service\Acl.loadStaticAcl
-
-This is used to load up static Acl.
-
-
-array(
-                'acl' => $acl,
-                'roleId' => $roleId,
-            )
-
-
-'resolveResource', array(
-                'resource' => $resource
-            )
-
-
-'loadResource', array(
-                'acl' => $acl,
-                'roleId' => $roleId,
-                'resource' => $resource,
-                'privilage' => $privilege
-            )
+ * `ZfcAcl\Service\Acl.getAcl` - triggered when ACL is requested. This allows lazy loading of ACL from cache or DB for example. If an ACL instance is provided by a listener, ACL is considered to be fully loaded.
+ * `ZfcAcl\Service\Acl.loadStaticAcl` - triggered if no ACL was retrieved during `ZfcAcl\Service\Acl.getAcl`.
+ * `ZfcAcl\Service\Acl.staticAclLoaded` - triggered after loading of static ACL (after `ZfcAcl\Service\Acl.loadStaticAcl`).
+ * `ZfcAcl\Service\Acl.invalidateCache` - triggered when cache invalidation is needed.
