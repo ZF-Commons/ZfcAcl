@@ -2,9 +2,9 @@
 
 namespace ZfcAcl\Model\Mapper;
 
-use     Zend\Acl\Acl as ZendAcl,
-        ZfcAcl\Model\RouteResourceMap as RouteResourceMapModel,
-        InvalidArgumentException;
+use Zend\Acl\Acl as ZendAcl,
+    ZfcAcl\Model\RouteResourceMap as RouteResourceMapModel,
+    InvalidArgumentException;
 
 class RouteResourceMapConfig implements RouteResourceMap {
     protected $config;

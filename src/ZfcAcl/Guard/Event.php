@@ -3,7 +3,7 @@
 namespace ZfcAcl\Guard;
 
 use Zend\EventManager\StaticEventManager,
-    Zend\Acl\Resource,
+    Zend\Acl\Resource\ResourceInterface as Resource,
     ZfcAcl\Model\EventGuardDefTriggeredEventAware,
     ZfcAcl\Exception\UnauthorizedException;
 

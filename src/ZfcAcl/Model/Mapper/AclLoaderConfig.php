@@ -2,8 +2,8 @@
 
 namespace ZfcAcl\Model\Mapper;
 
-use     Zend\Acl\Acl as ZendAcl,
-        InvalidArgumentException;
+use Zend\Acl\Acl as ZendAcl,
+    InvalidArgumentException;
 
 class AclLoaderConfig implements AclLoader {
     protected $config;

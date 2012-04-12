@@ -2,9 +2,9 @@
 
 namespace ZfcAcl\Guard;
 
-use     Zend\Mvc\MvcEvent,
-        ZfcAcl\Exception\UnauthorizedException,
-        Exception as NoRouteResourceFoundException;
+use Zend\Mvc\MvcEvent,
+    ZfcAcl\Exception\UnauthorizedException,
+    Exception as NoRouteResourceFoundException;
 
 class Route implements Guard {
     protected $routeResourceMapMapper;

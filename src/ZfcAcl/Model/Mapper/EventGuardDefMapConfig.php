@@ -2,10 +2,10 @@
 
 namespace ZfcAcl\Model\Mapper;
 
-use     Zend\Acl\Acl as ZendAcl,
-        ZfcAcl\Model\EventGuardDefStatic,
-        ZfcAcl\Model\EventGuardDefMap as EventGuardDefMapModel,
-        InvalidArgumentException;
+use Zend\Acl\Acl as ZendAcl,
+    ZfcAcl\Model\EventGuardDefStatic,
+    ZfcAcl\Model\EventGuardDefMap as EventGuardDefMapModel,
+    InvalidArgumentException;
 
 class EventGuardDefMapConfig implements EventGuardDefMap {
     protected $config;

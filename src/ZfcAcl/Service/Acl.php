@@ -5,9 +5,9 @@ namespace ZfcAcl\Service;
 use Zend\EventManager\EventCollection,
     Zend\EventManager\EventManager,
     Zend\Acl\Acl as ZendAcl,
-    Zend\Acl\Resource,
+    Zend\Acl\Resource\ResourceInterface as Resource,
     Zend\Acl\Resource\GenericResource,
-    Zend\Acl\Role,
+    Zend\Acl\Role\RoleInterface as Role,
     Zend\Acl\Role\GenericRole,
     Zend\EventManager\Event,
     Zend\Acl\Exception\InvalidArgumentException as ZendAclInvalidArgumentException,
@@ -15,7 +15,8 @@ use Zend\EventManager\EventCollection,
     ZfcAcl\Module,
     ZfcAcl\Model\Mapper\AclLoader,
     ZfcAcl\Service\Acl\RoleProvider,
-    InvalidArgumentException as NoStringResourceException;
+    InvalidArgumentException as NoStringResourceException,
+    RuntimeException as NoRoleProviderException;
 
 class Acl extends ServiceAbstract {
     protected $module;
@@ -129,9 +130,8 @@ class Acl extends ServiceAbstract {
     public function getRole() {
         $roleProvider = $this->getRoleProvider();
         if(!$roleProvider instanceof RoleProvider) {
-            throw new \RuntimeException("No role provider available");
+            throw new NoRoleProviderException("No role provider available");
         }
-
         $role = $roleProvider->getCurrentRole();
         if(!$role instanceof Role) {
             $role = new GenericRole('guest');

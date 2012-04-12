@@ -2,7 +2,7 @@
 
 namespace ZfcAcl\Service\Acl;
 
-use Zend\Acl\Role,
+use Zend\Acl\Role\RoleInterface as Role,
     Zend\Acl\Role\GenericRole,
     InvalidArgumentException;
 

@@ -3,7 +3,10 @@
 namespace ZfcAcl\Service;
 
 use Zend\Stdlib\CallbackHandler,
+    Zend\Acl\Role\RoleInterface as Role,
+    Zend\Acl\Role\GenericRole,
     ZfcBase\Service\ServiceAbstract,
+    ZfcAcl\Service\Acl\GenericRoleProvider,
     InvalidArgumentException;
 
 class Context extends ServiceAbstract {
@@ -15,18 +18,18 @@ class Context extends ServiceAbstract {
         if(!$callback instanceof CallbackHandler) {
             $callback = new CallbackHandler($callback);
         }
-        if(!$role instanceof \Zend\Acl\Role) {
+        if(!$role instanceof Role) {
             if(!is_string($role) || empty($role)) {
                 throw new InvalidArgumentException("Role must be instance of Zend\Acl\Role or not empty string");
             }
             
-            $role = new \Zend\Acl\Role\GenericRole($role);
+            $role = new GenericRole($role);
         }
         
         $aclService = $this->getAclService();
         
         //creates temp role provider returning role provided in method call
-        $tmpRoleProvider = new Acl\GenericRoleProvider();
+        $tmpRoleProvider = new GenericRoleProvider();
         $tmpRoleProvider->setCurrentRole($role);
         
         //swap role providers
