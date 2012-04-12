@@ -95,7 +95,7 @@ In this case you might want to consider creating new role auth/facebook and set 
 ### Acl configuration
 
 ACL can be fully configured from module config using DI settings of [AclLoaderConfig mapper](https://github.com/ZF-Commons/ZfcAcl/blob/master/src/ZfcAcl/Model/Mapper/AclLoaderConfig.php).
-An example can be found in [KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/config/module.config.php) (search for `ZfcAcl\Model\Mapper\AclLoaderConfig`).
+An example can be found in [KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/config/acl.config.php).
 The mapper reads config array defining roles/resources/rules in the structure below.
 
 #### Config example
@@ -203,7 +203,7 @@ return array(
 
 ## Dynamic ACL
 
-Example of dynamic ACL can be found in the [ZfcAcl plugin for KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentity/Plugin/ZfcAcl/ResourceLoader.php).
+Example of dynamic ACL can be found in the [ZfcAcl plugin for KapitchiIdentity module](https://github.com/kapitchi/KapitchiIdentity/blob/master/src/KapitchiIdentityAcl/Plugin/ZfcAcl.php).
 
 ## Application services
 
