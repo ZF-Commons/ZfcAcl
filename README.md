@@ -36,7 +36,7 @@ IRC: matuszemi @ irc://irc.freenode.net#zftalk.2
 ## Installation
 
  1. Put the module into `/vendor` folder and activate in your `config/application.config.php`.
- 2. Implement your own `ZfcAcl\Service\Acl\RoleProvider` (The default one is `ZfcAcl\Service\Acl\GenericRoleProvider`, you can replace it in configuration with your own implementation or reuse [KapitchiIdentity](https://github.com/kapitchi/KapitchiIdentity)'s plugin or [ZfcUser](https://github.com/ZF-Commons/ZfcUser)).
+ 2. Implement your own `ZfcAcl\Service\Acl\RoleProvider` (or use existing modules [KapitchiIdentity](https://github.com/kapitchi/KapitchiIdentity) or [ZfcUser](https://github.com/ZF-Commons/ZfcUser)).
  3. Set up static ACL with your own roles, resources, rules as you need (see "Roles, resources and rules" below).
  4. (Optionally) Set up route/event/dispatch guards (see "Guards" below) which do provide implicit protection to your application.
  5. Use the ACL service like `$aclService->isAllowed('ZfcAcl', 'use')`
