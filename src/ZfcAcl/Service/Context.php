@@ -7,17 +7,36 @@ use Zend\Stdlib\CallbackHandler,
     Zend\Acl\Role\GenericRole,
     ZfcBase\Service\ServiceAbstract,
     ZfcAcl\Service\Acl\GenericRoleProvider,
-    InvalidArgumentException;
+    InvalidArgumentException,
+    RuntimeException as TempRoleNotSetException,
+    RuntimeException as TempRoleSetAlreadyException;
 
 class Context extends ServiceAbstract {
     
     protected $aclService;
+    protected $originalRoleProvider;
             
     public function runAs($role, $callback, $args = array()) {
-        //fix parameters
         if(!$callback instanceof CallbackHandler) {
             $callback = new CallbackHandler($callback);
         }
+        
+        $this->setTempRole($role);
+        
+        //execute
+        $ret = $callback->call($args);
+
+        $this->rollbackTempRole();
+        
+        return $ret;
+    }
+    
+    public function setTempRole($role) {
+        if($this->originalRoleProvider !== null) {
+            throw new TempRoleSetAlreadyException("You have to rollback currently set temp role");
+        }
+        
+        //fix parameters
         if(!$role instanceof Role) {
             if(!is_string($role) || empty($role)) {
                 throw new InvalidArgumentException("Role must be instance of Zend\Acl\Role or not empty string");
@@ -33,16 +52,18 @@ class Context extends ServiceAbstract {
         $tmpRoleProvider->setCurrentRole($role);
         
         //swap role providers
-        $origRoleProvider = $aclService->getRoleProvider();
+        $this->originalRoleProvider = $aclService->getRoleProvider();
         $aclService->setRoleProvider($tmpRoleProvider);
+    }
+    
+    public function rollbackTempRole() {
+        if($this->originalRoleProvider === null) {
+            throw new TempRoleNotSetException("Can't rollback the role provider");
+        }
         
-        //execute
-        $ret = $callback->call($args);
-        
+        $aclService = $this->getAclService();
         //swap it back
-        $aclService->setRoleProvider($origRoleProvider);
-        
-        return $ret;
+        $aclService->setRoleProvider($this->originalRoleProvider);
     }
     
     public function getAclService() {
