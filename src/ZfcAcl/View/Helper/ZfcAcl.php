@@ -2,25 +2,41 @@
 
 namespace ZfcAcl\View\Helper;
 
-use Zend\View\Helper\AbstractHelper,
-    Zend\Authentication\AuthenticationService;
+use Zend\View\Helper\AbstractHelper;
+use Zend\Authentication\AuthenticationService;
+use ZfcAcl\Service\Acl;
+use ZfcAcl\Service\ZfcAclAwareInterface;
 
-class ZfcAcl extends AbstractHelper
+class ZfcAcl extends AbstractHelper implements ZfcAclAwareInterface
 {
+    /**
+     * @var Acl
+     */
     protected $aclService;
 
+    /**
+     * @param null|string|\Zend\Acl\Resource $resource
+     * @param null|string $privilege
+     * @return boolean
+     */
     public function isAllowed($resource, $privilege = null)
     {
         return $this->getAclService()->isAllowed($resource, $privilege);
     }
-    
-    public function getAclService ()
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setZfcAclService(Acl $acl)
+    {
+        $this->aclService = $acl;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getZfcAclService()
     {
         return $this->aclService;
-    }
-    
-    public function setAclService ($aclService)
-    {
-        $this->aclService = $aclService;
     }
 }

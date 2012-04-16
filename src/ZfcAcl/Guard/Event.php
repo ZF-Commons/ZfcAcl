@@ -2,56 +2,74 @@
 
 namespace ZfcAcl\Guard;
 
-use Zend\EventManager\StaticEventManager,
-    Zend\Acl\Resource\ResourceInterface as Resource,
-    ZfcAcl\Model\EventGuardDefTriggeredEventAware,
-    ZfcAcl\Exception\UnauthorizedException;
+use Zend\EventManager\StaticEventManager;
+use Zend\Acl\Resource\ResourceInterface as Resource;
+use ZfcAcl\Model\EventGuardDefTriggeredEventAware;
+use ZfcAcl\Exception\UnauthorizedException;
+use ZfcAcl\Service\ZfcAclAwareInterface;
 
-class Event implements Guard {
+class Event implements Guard, ZfcAclAwareInterface
+{
+    /**
+     * @var AclService
+     */
     protected $aclService;
     protected $eventGuardDefMapper;
-    
-    public function bootstrap() {
+
+    public function bootstrap()
+    {
         $events = StaticEventManager::getInstance();
         $acl = $this->getAclService();
-        
+
         $defMapper = $this->getEventGuardDefMapper();
         $defs = $defMapper->findByRoleId($acl->getRole()->getRoleId());
-        
-        foreach($defs as $def) {
-            $events->attach($def->getEventId(), $def->getEvent(), function($e) use ($acl, $def) {
-                if($def instanceof EventGuardDefTriggeredEventAware) {
+
+        foreach ($defs as $def) {
+            $events->attach($def->getEventId(), $def->getEvent(), function($e) use ($acl, $def)
+            {
+                if ($def instanceof EventGuardDefTriggeredEventAware) {
                     $def->setTriggeredEvent($e);
                 }
-                
+
                 $resource = $def->getResource();
                 $privilege = $def->getPrivilege();
-                if(!$acl->isAllowed($resource, $privilege)) {
+                if (!$acl->isAllowed($resource, $privilege)) {
                     $roleId = $acl->getRole()->getRoleId();
-                    if($resource instanceof Resource) {
+                    if ($resource instanceof Resource) {
                         $resource = $resource->getResourceId();
                     }
-                    throw new UnauthorizedException("You ($roleId) are not allowed to perform '$privilege' on '$resource'");
+                    throw new UnauthorizedException(
+                        "$roleId` is not allowed to perform '$privilege' on '$resource'"
+                    );
                 }
             }, 1000);
         }
-        
+
     }
-    
-    public function getEventGuardDefMapper() {
+
+    public function getEventGuardDefMapper()
+    {
         return $this->eventGuardDefMapper;
     }
 
-    public function setEventGuardDefMapper($eventGuardDefMapper) {
+    public function setEventGuardDefMapper($eventGuardDefMapper)
+    {
         $this->eventGuardDefMapper = $eventGuardDefMapper;
     }
-        
-    public function getAclService() {
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setZfcAclService(AclService $acl)
+    {
+        $this->aclService = $acl;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getZfcAclService()
+    {
         return $this->aclService;
     }
-
-    public function setAclService($aclService) {
-        $this->aclService = $aclService;
-    }
-
 }

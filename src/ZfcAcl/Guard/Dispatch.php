@@ -2,16 +2,22 @@
 
 namespace ZfcAcl\Guard;
 
-use Zend\Mvc\MvcEvent,
-    ZfcAcl\Exception\UnauthorizedException,
-    ZfcAcl\Model\Mapper\DispatchableResourceMapperInterface,
-    ZfcAcl\Service\Acl as AclService;
+use Zend\Mvc\MvcEvent;
+use ZfcAcl\Exception\UnauthorizedException;
+use ZfcAcl\Model\Mapper\DispatchableResourceMapperInterface;
+use ZfcAcl\Service\Acl as AclService;
+use ZfcAcl\Service\ZfcAclAwareInterface;
 
 /**
  * Dispatch guard applies ACL checks the controller that has been requested
  */
-class Dispatch implements Guard
+class Dispatch implements Guard, ZfcAclAwareInterface
 {
+    /**
+     * @var AclService
+     */
+    protected $aclService;
+
     /**
      * @var DispatchableResourceMapperInterface
      */
@@ -24,11 +30,6 @@ class Dispatch implements Guard
     {
         $this->setDispatchableResourceMapper($dispatchableResourceMapper);
     }
-
-    /**
-     * @var AclService
-     */
-    protected $aclService;
 
     public function dispatch(MvcEvent $e)
     {
@@ -43,7 +44,7 @@ class Dispatch implements Guard
         if (!$this->aclService->isAllowed($controllerResource)) {
             throw new UnauthorizedException(
                 $this->aclService->getRole()->getRoleId() . ' is not allowed to access dispatchable '
-                . $controller . ' (' . $controllerResource . ')'
+                    . $controller . ' (' . $controllerResource . ')'
             );
         }
     }
@@ -64,13 +65,19 @@ class Dispatch implements Guard
         $this->dispatchableResourceMapper = $dispatchableResourceMapper;
     }
 
-    public function getAclService()
+    /**
+     * {@inheritDoc}
+     */
+    public function setZfcAclService(AclService $acl)
     {
-        return $this->aclService;
+        $this->aclService = $acl;
     }
 
-    public function setAclService(AclService $aclService)
+    /**
+     * {@inheritDoc}
+     */
+    public function getZfcAclService()
     {
-        $this->aclService = $aclService;
+        return $this->aclService;
     }
 }
