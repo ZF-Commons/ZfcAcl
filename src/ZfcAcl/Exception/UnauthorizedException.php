@@ -2,6 +2,8 @@
 
 namespace ZfcAcl\Exception;
 
-class UnauthorizedException extends \RuntimeException {
-    
+use RuntimeException;
+
+class UnauthorizedException extends RuntimeException implements ExceptionInterface
+{
 }
