@@ -2,18 +2,22 @@
 
 namespace ZfcAcl;
 
-use Zend\Module\Manager,
-    Zend\Mvc\ApplicationInterface,
+use Zend\ModuleManager\ModuleManager,
     Zend\EventManager\StaticEventManager,
-    Zend\EventManager\EventDescription as Event,
-    Zend\Mvc\MvcEvent as MvcEvent,
+    Zend\ModuleManager\Feature\AutoloaderProviderInterface,
+    Zend\ModuleManager\Feature\ConfigProviderInterface,
+    Zend\ModuleManager\Feature\ServiceProviderInterface,
+    Zend\Mvc\ApplicationInterface,
     ZfcBase\Module\ModuleAbstract;
 
-class Module extends ModuleAbstract
+class Module extends ModuleAbstract implements
+    AutoloaderProviderInterface,
+    ConfigProviderInterface,
+    ServiceProviderInterface
 {
-    public function bootstrap(Manager $moduleManager, ApplicationInterface $app)
+    public function bootstrap(ModuleManager $moduleManager, ApplicationInterface $app)
     {
-        $locator = $app->getLocator();
+        $locator = $app->getServiceManager();
         
         if ($this->getOption('enable_guards.route', true)) {
             $routeProtector = $locator->get('ZfcAcl\Guard\Route');
@@ -29,7 +33,14 @@ class Module extends ModuleAbstract
             $guard = $locator->get('ZfcAcl\Guard\Dispatch');
             $app->events()->attach('dispatch', array($guard, 'dispatch'), 1000);
         }
+    }
 
+    public function getServiceConfiguration()
+    {
+        return array(
+            'factories' => array(
+            ),
+        );
     }
 
     public function getDir()
