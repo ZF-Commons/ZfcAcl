@@ -15,8 +15,11 @@ class Module extends ModuleAbstract implements
     ConfigProviderInterface,
     ServiceProviderInterface
 {
+    protected $application;
+
     public function bootstrap(ModuleManager $moduleManager, ApplicationInterface $app)
     {
+        $this->application = $app;
         $locator = $app->getServiceManager();
         
         if ($this->getOption('enable_guards.route', true)) {
@@ -37,10 +40,23 @@ class Module extends ModuleAbstract implements
 
     public function getServiceConfiguration()
     {
+        $module = $this;
         return array(
             'factories' => array(
+                'ZfcAcl\Service\Acl' => function ($sm) use ($module) {
+                    $service = new Service\Acl($module);
+                    $service->setAclLoader(new Model\Mapper\AclLoaderConfig);
+                    $service->setRoleProvider(new Service\Acl\GenericRoleProvider);
+                    $service->setEventManager($sm->get('EventManager'));
+                    return $service;
+                },
             ),
         );
+    }
+
+    public function getApplication()
+    {
+        return $this->application;
     }
 
     public function getDir()
