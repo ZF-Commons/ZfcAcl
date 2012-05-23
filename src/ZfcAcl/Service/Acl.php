@@ -100,7 +100,7 @@ class Acl extends ServiceAbstract {
                 return $this->acl;
             }
 
-            return new \Zend\Acl\Acl;
+            $acl = $this->getServiceLocator()->get('Zend\Acl\Acl');
             $this->triggerEvent('loadStaticAcl', array(
                 'acl' => $acl,
                 'roleId' => $roleId,

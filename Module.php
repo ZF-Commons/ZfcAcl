@@ -43,11 +43,16 @@ class Module extends ModuleAbstract implements
         $module = $this;
         return array(
             'factories' => array(
+                'Zend\Acl\Acl' => function($sm) {
+                    return new \Zend\Acl\Acl();
+                },
+
                 'ZfcAcl\Service\Acl' => function ($sm) use ($module) {
                     $service = new Service\Acl($module);
                     $service->setAclLoader(new Model\Mapper\AclLoaderConfig);
                     $service->setRoleProvider(new Service\Acl\GenericRoleProvider);
                     $service->setEventManager($sm->get('EventManager'));
+                    $service->setServiceLocator($sm);
                     return $service;
                 },
             ),
