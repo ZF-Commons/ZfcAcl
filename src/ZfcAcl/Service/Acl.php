@@ -100,7 +100,7 @@ class Acl extends ServiceAbstract {
                 return $this->acl;
             }
 
-            $acl = $this->getLocator()->get('Zend\Acl\Acl');
+            $acl = $this->getServiceLocator()->get('Zend\Acl\Acl');
             $this->triggerEvent('loadStaticAcl', array(
                 'acl' => $acl,
                 'roleId' => $roleId,
@@ -147,20 +147,20 @@ class Acl extends ServiceAbstract {
     //event listeners
     public function getCacheSessionAcl(Event $e) {
         //TODO DI!
-        $mapper = $this->getLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
+        $mapper = $this->getServiceLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
         $acl = $mapper->loadByRoleId($e->getParam('role'));
         return $acl;
     }
 
     public function persistCacheSessionAcl(Event $e) {
         //TODO DI!
-        $mapper = $this->getLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
+        $mapper = $this->getServiceLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
         return $mapper->persist($e->getParam('acl'), $e->getParam('role'));
     }
 
     public function invalidateCacheSession(Event $e) {
         //TODO DI!
-        $mapper = $this->getLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
+        $mapper = $this->getServiceLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
         $mapper->invalidate($e->getParam('role'));
     }
 
