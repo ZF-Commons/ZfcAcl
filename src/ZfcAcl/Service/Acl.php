@@ -18,7 +18,8 @@ use Zend\EventManager\EventCollection,
     InvalidArgumentException as NoStringResourceException,
     RuntimeException as NoRoleProviderException;
 
-class Acl extends ServiceAbstract {
+class Acl extends ServiceAbstract
+{
     protected $module;
     protected $acl;
     protected $aclLoader;
@@ -28,40 +29,41 @@ class Acl extends ServiceAbstract {
      * TODO XXX there is a bug in DI while injecting a module works with constructor only!
      * @param Module $module
      */
-    public function __construct(Module $module) {
+    public function __construct(Module $module)
+    {
         $this->setModule($module);
     }
 
-    public function isAllowed($resource = null, $privilege = null) {
+    public function isAllowed($resource = null, $privilege = null)
+    {
         $acl = $this->getAcl();
         $roleId = $this->getRoleId();
 
         //matuszemi: we want to get resource object here at all times
-        if(!$resource instanceof Resource) {
+        if (!$resource instanceof Resource) {
             $result = $this->triggerEvent('resolveResource', array(
                 'resource' => $resource
             ), function($ret) {
                 return $ret instanceof Resource;
             });
             $resolvedResource = $result->last();
-            if($resolvedResource instanceof Resource) {
+            if ($resolvedResource instanceof Resource) {
                 $resource = $resolvedResource;
-            }
-            else {
-                if(!is_string($resource)) {
+            } else {
+                if (!is_string($resource)) {
                     throw new NoStringResourceException("Resource needs to be Resource instance or string");
                 }
                 $resource = new GenericResource($resource);
             }
         }
 
-        if(!$acl->hasResource($resource)) {
+        if (!$acl->hasResource($resource)) {
 
             //mz: this is your chance to load resource ACL up!
             $this->triggerEvent('loadResource', array(
-                'acl' => $acl,
-                'roleId' => $roleId,
-                'resource' => $resource,
+                'acl'       => $acl,
+                'roleId'    => $roleId,
+                'resource'  => $resource,
                 'privilege' => $privilege
             ));
 
@@ -85,8 +87,9 @@ class Acl extends ServiceAbstract {
         }
     }
 
-    public function getAcl() {
-        if($this->acl === null) {
+    public function getAcl()
+    {
+        if ($this->acl === null) {
             $roleId = $this->getRoleId();
             $result = $this->events()->trigger('getAcl', $this, array(
                 'roleId' => $roleId,
@@ -116,7 +119,8 @@ class Acl extends ServiceAbstract {
         return $this->acl;
     }
 
-    public function invalidateCache() {
+    public function invalidateCache()
+    {
         $this->triggerEvent('invalidateCache', array(
             'roleId' => $this->getRoleId(),
         ));
@@ -127,82 +131,94 @@ class Acl extends ServiceAbstract {
     /**
      * @return Zend\Acl\Role
      */
-    public function getRole() {
+    public function getRole()
+    {
         $roleProvider = $this->getRoleProvider();
-        if(!$roleProvider instanceof RoleProvider) {
+        if (!$roleProvider instanceof RoleProvider) {
             throw new NoRoleProviderException("No role provider available");
         }
         $role = $roleProvider->getCurrentRole();
-        if(!$role instanceof Role) {
+        if (!$role instanceof Role) {
             $role = new GenericRole('guest');
         }
 
         return $role;
     }
 
-    protected function getRoleId() {
+    protected function getRoleId()
+    {
         return $this->getRole()->getRoleId();
     }
 
     //event listeners
-    public function getCacheSessionAcl(Event $e) {
+    public function getCacheSessionAcl(Event $e)
+    {
         //TODO DI!
         $mapper = $this->getLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
         $acl = $mapper->loadByRoleId($e->getParam('role'));
         return $acl;
     }
 
-    public function persistCacheSessionAcl(Event $e) {
+    public function persistCacheSessionAcl(Event $e)
+    {
         //TODO DI!
         $mapper = $this->getLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
         return $mapper->persist($e->getParam('acl'), $e->getParam('role'));
     }
 
-    public function invalidateCacheSession(Event $e) {
+    public function invalidateCacheSession(Event $e)
+    {
         //TODO DI!
         $mapper = $this->getLocator()->get('ZfcAcl\Model\Mapper\AclCacheSession');
         $mapper->invalidate($e->getParam('role'));
     }
 
-    protected function attachDefaultListeners() {
+    protected function attachDefaultListeners()
+    {
         $events = $this->events();
 
         //AclLoaderMapper
         $aclLoader = $this->getAclLoader();
         $events->attach('loadStaticAcl', function($e) use ($aclLoader) {
-            if($aclLoader instanceof AclLoader) {
+            if ($aclLoader instanceof AclLoader) {
                 $aclLoader->loadAclByRoleId($e->getParam('acl'), $e->getParam('roleId'));
             }
         });
 
-        if($this->getModule()->getOption('enable_cache', false)) {
+        if ($this->getModule()->getOption('enable_cache', false)) {
             $events->attach('getAcl', array($this, 'getCacheSessionAcl'));
             $events->attach('staticAclLoaded', array($this, 'persistCacheSessionAcl'));
             $events->attach('invalidateCache', array($this, 'invalidateCacheSessionCache'));
         }
     }
 
-    public function setModule(Module $module) {
+    public function setModule(Module $module)
+    {
         $this->module = $module;
     }
 
-    public function getModule() {
+    public function getModule()
+    {
         return $this->module;
     }
 
-    public function getAclLoader() {
+    public function getAclLoader()
+    {
         return $this->aclLoader;
     }
 
-    public function setAclLoader(AclLoader $aclLoader) {
+    public function setAclLoader(AclLoader $aclLoader)
+    {
         $this->aclLoader = $aclLoader;
     }
 
-    public function getRoleProvider() {
+    public function getRoleProvider()
+    {
         return $this->roleProvider;
     }
 
-    public function setRoleProvider(RoleProvider $roleProvider) {
+    public function setRoleProvider(RoleProvider $roleProvider)
+    {
         $this->roleProvider = $roleProvider;
     }
 

@@ -2,6 +2,6 @@
 
 namespace ZfcAcl\Guard;
 
-interface Guard {
-    
+interface Guard
+{
 }

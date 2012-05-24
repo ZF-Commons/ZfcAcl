@@ -6,16 +6,19 @@ use Zend\Acl\Role\RoleInterface as Role,
     Zend\Acl\Role\GenericRole,
     InvalidArgumentException;
 
-class GenericRoleProvider implements RoleProvider {
+class GenericRoleProvider implements RoleProvider
+{
     protected $currentRole;
-    
-    public function getCurrentRole() {
+
+    public function getCurrentRole()
+    {
         return $this->currentRole;
     }
-    
-    public function setCurrentRole($currentRole) {
-        if(!$currentRole instanceof Role) {
-            if(!is_string($currentRole)) {
+
+    public function setCurrentRole($currentRole)
+    {
+        if (!$currentRole instanceof Role) {
+            if (!is_string($currentRole)) {
                 throw new InvalidArgumentException("Invalid role - string or Role instance needed");
             }
             

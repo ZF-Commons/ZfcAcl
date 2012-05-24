@@ -2,6 +2,7 @@
 
 namespace ZfcAcl\Model\Mapper;
 
-interface RouteResourceMap {
+interface RouteResourceMap
+{
     public function findByRouteName($route);
 }
