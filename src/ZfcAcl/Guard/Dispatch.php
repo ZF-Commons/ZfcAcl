@@ -33,14 +33,16 @@ class Dispatch implements Guard
     public function dispatch(MvcEvent $e)
     {
         // @todo this logic should somehow be shared with Zend\Mvc\Application
-        $controller = $e->getRouteMatch()->getParam('controller', 'not-found');
+        $routeMatch = $e->getRouteMatch();
+        $controller = $routeMatch->getParam('controller', 'not-found');
+        $action = $routeMatch->getParam('action', null);
         if (!$controller) {
             // Can't check against null
             return;
         }
         $controllerResource = $this->dispatchableResourceMapper->getDispatchableResource($controller);
 
-        if (!$this->aclService->isAllowed($controllerResource)) {
+        if (!$this->aclService->isAllowed($controllerResource, $action)) {
             throw new UnauthorizedException(
                 $this->aclService->getRole()->getRoleId() . ' is not allowed to access dispatchable '
                 . $controller . ' (' . $controllerResource . ')'
