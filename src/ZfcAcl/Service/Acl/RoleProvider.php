@@ -1,7 +1,8 @@
 <?php
 namespace ZfcAcl\Service\Acl;
 
-interface RoleProvider {
+interface RoleProvider
+{
     /**
      * @return Zend\Acl\Role\RoleInterface
      */

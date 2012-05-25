@@ -9,7 +9,9 @@ use ZfcBase\Model\ModelAbstract;
  *
  * @todo add method to reverse mappings?
  */
-class DispatchableResourceMapper extends ModelAbstract implements DispatchableResourceMapperInterface
+class DispatchableResourceMapper
+    extends ModelAbstract
+    implements DispatchableResourceMapperInterface
 {
     const DEFAULT_RESOURCE_PREFIX = 'dispatchable/';
 
