@@ -1,6 +1,7 @@
 <?php
 namespace ZfcAcl\Model;
 
-class EventGuardDefMap extends \ArrayObject {
-    
+class EventGuardDefMap extends \ArrayObject
+{
+
 }

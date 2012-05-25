@@ -18,17 +18,17 @@ class Dispatch implements Guard
     protected $dispatchableResourceMapper;
 
     /**
+     * @var AclService
+     */
+    protected $aclService;
+
+    /**
      * @param DispatchableResourceMapperInterface $dispatchableResourceMapper
      */
     public function __construct(DispatchableResourceMapperInterface $dispatchableResourceMapper)
     {
         $this->setDispatchableResourceMapper($dispatchableResourceMapper);
     }
-
-    /**
-     * @var AclService
-     */
-    protected $aclService;
 
     public function dispatch(MvcEvent $e)
     {

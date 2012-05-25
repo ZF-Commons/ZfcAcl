@@ -1,7 +1,8 @@
 <?php
 namespace ZfcAcl\Model;
 
-interface EventGuardDef {
+interface EventGuardDef
+{
     public function getEventId();
     public function getEvent();
     public function getResource();

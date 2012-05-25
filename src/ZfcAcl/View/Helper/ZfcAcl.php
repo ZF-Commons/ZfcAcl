@@ -13,13 +13,13 @@ class ZfcAcl extends AbstractHelper
     {
         return $this->getAclService()->isAllowed($resource, $privilege);
     }
-    
-    public function getAclService ()
+
+    public function getAclService()
     {
         return $this->aclService;
     }
-    
-    public function setAclService ($aclService)
+
+    public function setAclService($aclService)
     {
         $this->aclService = $aclService;
     }
