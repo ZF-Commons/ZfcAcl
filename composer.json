@@ -1,0 +1,29 @@
+{
+    "name": "zf-commons/zfc-acl",
+    "description": "Provides ACL and different types of "guards" for your application.",
+    "type": "library",
+    "keywords": [
+        "zf2"
+    ],
+    "homepage": "https://github.com/ZF-Commons/ZfcAcl",
+    "authors": [
+        {
+            "name": "Matus Zeman",
+            "email": "matus.zeman@gmail.com",
+            "homepage": "https://github.com/matuszemi"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "dev-master",
+		"zf-commons/zfc-base": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZfcAcl": "src/"
+        },
+        "classmap": [
+            "./"
+        ]
+    }
+}
