@@ -1,6 +1,6 @@
 {
     "name": "zf-commons/zfc-acl",
-    "description": "Provides ACL and different types of "guards" for your application.",
+    "description": "Provides ACL and different types of 'guards' for your application.",
     "type": "library",
     "keywords": [
         "zf2"
