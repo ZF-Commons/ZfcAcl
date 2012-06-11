@@ -3,9 +3,9 @@
 namespace ZfcAcl\Model;
 
 use Zend\EventManager\Event,
-    ZfcBase\Model\ModelAbstract;
+    ZfcBase\Model\AbstractModel;
 
-abstract class EventGuardDefTriggeredEventAware extends ModelAbstract implements EventGuardDef
+abstract class EventGuardDefTriggeredEventAware extends AbstractModel implements EventGuardDef
 {
     protected $eventId;
     protected $event;
