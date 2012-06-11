@@ -2,7 +2,7 @@
 
 namespace ZfcAcl\Model\Mapper;
 
-use ZfcBase\Model\ModelAbstract;
+use ZfcBase\Model\AbstractModel;
 
 /**
  * Simply maps provided dispatchable names to resource names. In this case by simply adding some prefix.
@@ -10,7 +10,7 @@ use ZfcBase\Model\ModelAbstract;
  * @todo add method to reverse mappings?
  */
 class DispatchableResourceMapper
-    extends ModelAbstract
+    extends AbstractModel
     implements DispatchableResourceMapperInterface
 {
     const DEFAULT_RESOURCE_PREFIX = 'dispatchable/';

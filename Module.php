@@ -8,9 +8,9 @@ use Zend\ModuleManager\ModuleManager,
     Zend\ModuleManager\Feature\ConfigProviderInterface,
     Zend\ModuleManager\Feature\ServiceProviderInterface,
     Zend\Mvc\ApplicationInterface,
-    ZfcBase\Module\ModuleAbstract;
+    ZfcBase\Module\AbstractModule;
 
-class Module extends ModuleAbstract implements
+class Module extends AbstractModule implements
     AutoloaderProviderInterface,
     ConfigProviderInterface,
     ServiceProviderInterface

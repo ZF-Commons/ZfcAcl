@@ -2,9 +2,9 @@
 
 namespace ZfcAcl\Model;
 
-use ZfcBase\Model\ModelAbstract;
+use ZfcBase\Model\AbstractModel;
 
-class RouteResourceMap extends ModelAbstract
+class RouteResourceMap extends AbstractModel
 {
     protected $defaultResource;
     protected $childMaps = array();
