@@ -38,7 +38,7 @@ class Module extends AbstractModule implements
         }
     }
 
-    public function getServiceConfiguration()
+    public function getServiceConfig()
     {
         $module = $this;
         return array(
