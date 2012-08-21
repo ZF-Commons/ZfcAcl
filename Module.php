@@ -21,7 +21,7 @@ class Module extends AbstractModule implements
     {
         $this->application = $app;
         $locator = $app->getServiceManager();
-        
+
         if ($this->getOption('enable_guards.route', true)) {
             $routeProtector = $locator->get('ZfcAcl\Guard\Route');
             $app->events()->attach('route', array($routeProtector, 'onRoute'), -1000);
@@ -38,7 +38,7 @@ class Module extends AbstractModule implements
         }
     }
 
-    public function getServiceConfiguration()
+    public function getServiceConfig()
     {
         $module = $this;
         return array(
@@ -55,13 +55,13 @@ class Module extends AbstractModule implements
                     $service->setServiceLocator($sm);
                     return $service;
                 },
-                
+
                 'ZfcAcl\Service\Context' => function ($sm) {
                     $context = new Service\Context;
                     $context->setAclService($sm->get('ZfcAcl\Service\Acl'));
                     return $context;
                 },
-                
+
                 'ZfcAcl\Controller\Plugin\ZfcAcl' => function ($sm) {
                     $plugin = Controller\Plugin\ZfcAcl;
                     $plugin->setAclService($sm->get('ZfcAcl\Service\Acl'));
@@ -113,14 +113,14 @@ class Module extends AbstractModule implements
                     $mapper->setConfig(array());
                     return $mapper;
                 },
-                
+
                 'ZfcAcl\Guard\Event' => function ($sm) {
                     $guard = new Guard\Event;
                     $guard->setAclService($sm->get('ZfcAcl\Service\Acl'));
                     $guard->setEventGuardDefMapper($sm->get('ZfcAcl\Model\Mapper\EventGuardDefMapConfig'));
                     return $guard;
                 },
-                
+
                 'ZfcAcl\Model\Mapper\EventGuardDefMapConfig' => function ($sm) {
                     return new Model\Mapper\EventGuardDefMapConfig;
                 },
