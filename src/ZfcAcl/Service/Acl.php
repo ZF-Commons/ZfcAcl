@@ -91,7 +91,7 @@ class Acl extends ServiceAbstract
     {
         if ($this->acl === null) {
             $roleId = $this->getRoleId();
-            $result = $this->events()->trigger('getAcl', $this, array(
+            $result = $this->triggerEvent('getAcl', array(
                 'roleId' => $roleId,
             ), function($ret) {
                 return ($ret instanceof ZendAcl);
